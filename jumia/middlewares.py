@@ -6,6 +6,10 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from fake_useragent import UserAgent
+import fake_useragent
+import random
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
 
 class JumiaSpiderMiddleware(object):
@@ -56,10 +60,11 @@ class JumiaSpiderMiddleware(object):
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class JumiaDownloaderMiddleware(object):
+class JumiaDownloaderMiddleware(UserAgentMiddleware):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
+
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -78,7 +83,10 @@ class JumiaDownloaderMiddleware(object):
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
-        return None
+        #if self.user_agent:
+        ua=fake_useragent.UserAgent()
+        print("正在使用该useragent:"+str(ua.random))
+        request.headers.setdefault(b'User-Agent', ua.random)
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.
@@ -101,3 +109,4 @@ class JumiaDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
