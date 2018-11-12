@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from ..items import JumiaItem
+from scrapy_redis.spiders import RedisSpider
 
 
-class JumiaspiderSpider(scrapy.Spider):
+class JumiaspiderSpider(RedisSpider):
     name = 'jumiaspider'
     allowed_domains = ['jumia.co.ke']
     start_urls = ['https://www.jumia.co.ke/']
@@ -24,7 +25,7 @@ class JumiaspiderSpider(scrapy.Spider):
             yield scrapy.Request(url=nextproducturl[0],callback=self.parse_category())
 
     def paese_product(self,response):
-        item=JumiaItem
+        item=JumiaItem()
         item['l1']=response.xpath('/html/body/main/nav/ul/li[1]/a/text()').extract()
         item['l2']=response.xpath('/html/body/main/nav/ul/li[2]/a/text()').extract()
         item['l3']=response.xpath('/html/body/main/nav/ul/li[3]/a/text()').extract()

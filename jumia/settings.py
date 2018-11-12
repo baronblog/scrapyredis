@@ -14,12 +14,18 @@ BOT_NAME = 'jumia'
 SPIDER_MODULES = ['jumia.spiders']
 NEWSPIDER_MODULE = 'jumia.spiders'
 
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+#redis配置
+
+REDIS_URL = 'redis://:yang5224910@96.45.191.65:6379'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'jumia (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
+SCHEDULER_FLUSH_ON_START = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -43,7 +49,10 @@ DOWNLOAD_DELAY = 1
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 #   'Accept-Language': 'en',
 #}
-
+MYSQL_HOST = '96.45.191.65'
+MYSQL_DBNAME = 'louis'     # 数据库名
+MYSQL_USER = 'root'         # 数据库用户
+MYSQL_PASSWORD = '#Yang5224910$%'   # 数据库密码
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
