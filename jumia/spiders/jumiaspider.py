@@ -8,11 +8,11 @@ from ..items import JumiaItem
 class JumiaspiderSpider(RedisSpider):
     name = 'jumiaspider'
     allowed_domains = ['jumia.co.ke']
-    redis_key = 'jumiaspider:https://www.jumia.co.ke/'
+    redis_key = 'jumiaspider:start_urls'
     start_urls = ['https://www.jumia.co.ke/']
 
     def parse(self, response):
-        categoryurl=response.xpath('//a[@class="main-category"]/@href').extract()
+        categoryurl = response.xpath('//a[@class="main-category"]/@href').extract()
         for url in categoryurl:
             yield scrapy.Request(url=url, callback=self.parse_category)
 
