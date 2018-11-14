@@ -84,7 +84,7 @@ class JumiaDownloaderMiddleware(UserAgentMiddleware):
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
         #if self.user_agent:
-        ua=fake_useragent.UserAgent()
+        ua = fake_useragent.UserAgent()
         print("正在使用该useragent:"+str(ua.random))
         request.headers.setdefault(b'User-Agent', ua.random)
 

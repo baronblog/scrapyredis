@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from ..items import JumiaItem
 from scrapy_redis.spiders import RedisSpider
+from scrapy import cmdline
+from ..items import JumiaItem
 
 
 class JumiaspiderSpider(RedisSpider):
     name = 'jumiaspider'
     allowed_domains = ['jumia.co.ke']
+    redis_key = 'jumiaspider:https://www.jumia.co.ke/'
     start_urls = ['https://www.jumia.co.ke/']
 
     def parse(self, response):
         categoryurl=response.xpath('//a[@class="main-category"]/@href').extract()
         for url in categoryurl:
-            yield scrapy.Request(url=url,callback=self.parse_category)
+            yield scrapy.Request(url=url, callback=self.parse_category)
 
 
     def parse_category(self,response):
@@ -65,10 +67,3 @@ class JumiaspiderSpider(RedisSpider):
         else:
             item['price']=response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[7]/div[1]/div/span/span[2]/text()').extract()
         yield item
-
-
-
-
-
-
-        

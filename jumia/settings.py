@@ -19,8 +19,12 @@ DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 #redis配置
 
 REDIS_URL = 'redis://:yang5224910@96.45.191.65:6379'
+#ITEM_PIPELINES = {
+#    'scrapy_redis.pipelines.RedisPipeline': 300
+#}
+
 ITEM_PIPELINES = {
-    'scrapy_redis.pipelines.RedisPipeline': 300
+    'jumia.pipelines.JumiaPipeline': 600,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
