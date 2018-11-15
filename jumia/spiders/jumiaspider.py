@@ -14,17 +14,23 @@ class JumiaspiderSpider(RedisSpider):
     def parse(self, response):
         categoryurl = response.xpath('//a[@class="main-category"]/@href').extract()
         for url in categoryurl:
+            print("正在抓取该url：" + str(url) + "\n")
+            with open("C:/Users/Hymn/Desktop/xxx/url"+str(url).replace("://","").replace("/","")+".txt", "w+") as f:
+                f.write(url)
             yield scrapy.Request(url=url, callback=self.parse_category)
 
 
     def parse_category(self,response):
-        producturl=response.xpath('''//a[@class="link"]''').extract()
-        nextproducturl=response.xpath('(//ul[@class="osh-pagination -horizontal"])[last()]/li[last()]').css("a::attr(href)").extract()
+        producturl = set(response.xpath('''//a[@class="link"]/@href''').extract())
+        nextproducturl = set(response.xpath('//li/a[@title="Next"]/@href').extract())
         for product in producturl:
+            print("正在抓取该产品链接：" + str(product) + "\n")
+            with open("C:/Users/Hymn/Desktop/xxx/product"+str(product).replace("://", "").replace("/","")+".txt", "w+") as f:
+                f.write(product)
             yield scrapy.Request(url=product,callback=self.paese_product)
 
         if nextproducturl is not None:
-            yield scrapy.Request(url=nextproducturl[0],callback=self.parse_category())
+            yield scrapy.Request(url=nextproducturl[0],callback=self.parse_category)
 
     def paese_product(self,response):
         item=JumiaItem()
