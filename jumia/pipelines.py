@@ -7,6 +7,9 @@
 from . import settings
 import time
 import pymysql
+import pymysql.cursors
+from twisted.enterprise import adbapi
+from twisted.internet import reactor
 
 class JumiaPipeline(object):
     def __init__(self):
@@ -43,3 +46,39 @@ class JumiaPipeline(object):
         print(item['product_url'])
         self.cursor.execute(sql)
         self.conn.commit()
+
+class MysqlTwistedPipline(object):
+    def __init__(self, dbpool):
+        self.dbpool=dbpool
+
+    @classmethod
+    def from_settings(cls, settings):
+        #读取settings.py文件中的配置
+        dbparms =dict(
+            host = settings['MYSQL_HOST'],
+            db = settings['MYSQL_DBNAME'],
+            user = settings['MYSQL_USER'],
+            passwd = settings['MYSQL_PASSWORD'],
+            charset = 'utf8',
+            cursorclass=pymysql.cursors.DictCursor,
+            use_unicode=True,
+        )
+        #创建连接池
+        dbpool = adbapi.ConnectionPool("pymysql", **dbparms)
+        return cls(dbpool)
+
+    def process_item(self, item, spider):
+        query = self.dbpool.runInteraction(self.insert_data,item)
+        query.addCallback(self.handle_error)
+
+    def handle_error(self, failure):
+        print(failure)
+
+    def insert_data(self, cursor, item):
+        dates = int(time.time())
+        insert_sql="insert into jumia_scrapy (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values\
+                    (%s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"%(item['l1'][0], item['l2'][0], item['l3'][0],item['goods_name'][0], \
+                                                                       item['review'][0], item['store'][0], item['sale'], item['rate'], \
+                                                                       item['product_url'], item['price'][0], dates)
+        print(insert_sql)
+        #cursor.execute(insert_sql)

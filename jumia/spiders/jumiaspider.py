@@ -33,7 +33,7 @@ class JumiaspiderSpider(RedisSpider):
             yield scrapy.Request(url=nextproducturl[0],callback=self.parse_category)
 
     def paese_product(self,response):
-        item=JumiaItem()
+        item = JumiaItem()
         item['l1']=response.xpath('/html/body/main/nav/ul/li[1]/a/text()').extract()
         item['l2']=response.xpath('/html/body/main/nav/ul/li[2]/a/text()').extract()
         item['l3']=response.xpath('/html/body/main/nav/ul/li[3]/a/text()').extract()
@@ -67,9 +67,5 @@ class JumiaspiderSpider(RedisSpider):
             else:
                 item['rate']=0
         item['product_url']="'"+str(response.url)+"'"
-        item['price']=response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[8]/div[1]/div/span/span[2]/text()').extract()
-        if item['price']:
-            pass
-        else:
-            item['price']=response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[7]/div[1]/div/span/span[2]/text()').extract()
+        item['price']=response.xpath('//span[@class="price"]/span[@dir="ltr"]/@data-price').extract()
         yield item

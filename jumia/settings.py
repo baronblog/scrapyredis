@@ -25,6 +25,7 @@ REDIS_URL = 'redis://:yang5224910@96.45.191.65:6379'
 
 ITEM_PIPELINES = {
     'jumia.pipelines.JumiaPipeline': 600,
+    'jumia.pipelines.MysqlTwistedPipline':500,
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
