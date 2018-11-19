@@ -31,7 +31,6 @@ class JumiaPipeline(object):
         itemstr = '"'
         dates = str(time.strftime("%Y%m%d"))
         print("我要开始处理商品详情页数据")
-        print("品类l1的字符类型是："+str(type(item['l1'][0])))
         print(item)
         sql = '''insert into jumia_scrapy (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values ({l1},{l2},{l3},{goods_name},{review},{store},{sale},{rate},{product_url},{price},{dates})'''.format( \
             l1=itemstr + str(item['l1'][0]) + itemstr, l2=itemstr + str(item['l2'][0]) + itemstr,
@@ -68,6 +67,7 @@ class MysqlTwistedPipline(object):
         return cls(dbpool)
 
     def process_item(self, item, spider):
+        print("创建连接池")
         query = self.dbpool.runInteraction(self.insert_data,item)
         query.addCallback(self.handle_error)
 
@@ -75,10 +75,16 @@ class MysqlTwistedPipline(object):
         print(failure)
 
     def insert_data(self, cursor, item):
+        print("开始异步插入数据")
         dates = int(time.time())
         insert_sql="insert into jumia_scrapy (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values\
-                    (%s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"%(item['l1'][0], item['l2'][0], item['l3'][0],item['goods_name'][0], \
+                    (%s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        parameters = (item['l1'][0], item['l2'][0], item['l3'][0],item['goods_name'][0], \
                                                                        item['review'][0], item['store'][0], item['sale'], item['rate'], \
                                                                        item['product_url'], item['price'][0], dates)
         print(insert_sql)
-        #cursor.execute(insert_sql)
+        try:
+            cursor.execute(insert_sql, parameters)
+            print("异步插入成功")
+        except:
+            print("异步插入失败")
