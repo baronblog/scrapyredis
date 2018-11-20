@@ -20,10 +20,13 @@ class JumiaspiderSpider(RedisSpider):
 
     def parse_category(self,response):
         producturl = response.xpath('''//a[@class="link"]/@href''').extract()
-        nextproducturl = response.xpath('//li/a[@title="Next"]/@href').extract()
+        nextproducturl = list(set(response.xpath('//li/a[@title="Next"]/@href').extract()))
+        print("我要打印producturl：" + str(producturl))
+        print("我要打印nextproducturl：" + str(nextproducturl) )
+
         for product in producturl:
             print("正在抓取该产品链接：" + str(product) + "\n")
-            yield scrapy.Request(url=product,callback=self.paese_product)
+            yield scrapy.Request(url=product, callback=self.paese_product)
 
         if nextproducturl is not None:
             yield scrapy.Request(url=nextproducturl[0], callback=self.parse_category)
@@ -40,7 +43,11 @@ class JumiaspiderSpider(RedisSpider):
         else:
             item['review'] = [0]
         item['store'] = response.xpath('//a[@class="-name"]/text()').extract()
-        item['sale'] = response.xpath('//span[@class="text color-default bold -prxs -inline-block -bold"]/text()').extract()[0]
+        item['sale'] = response.xpath('//span[@class="text color-default bold -prxs -inline-block -bold"]/text()').extract()
+        if item['sale']:
+            item['sale'] = item['sale'][0]
+        else:
+            item['sale'] = 0
         item['rate'] = response.xpath('//span[@class="text color-default-800 -seller_score"]/text()').extract()[0]
         item['product_url'] = response.xpath('//li[@class="last-child"]/a/@href').extract()
         item['price'] = response.xpath('//span[@class="price"]/span[@dir="ltr"]/@data-price').extract()
