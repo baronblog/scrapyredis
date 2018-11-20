@@ -68,7 +68,7 @@ class MysqlTwistedPipline(object):
 
     def process_item(self, item, spider):
         print("创建连接池")
-        query = self.dbpool.runInteraction(self.insert_data,item)
+        query = self.dbpool.runInteraction(self.insert_data, item)
         query.addCallback(self.handle_error)
 
     def handle_error(self, failure):

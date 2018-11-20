@@ -21,4 +21,4 @@ class JumiaItem(Item):
     product_url = Field()
     price = Field()
     dates = Field()
-    imgurl = Field()
+

@@ -23,17 +23,17 @@ class JumiaspiderSpider(RedisSpider):
         categoryurl = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
         nextproducturl = list(set(response.xpath('//li/a[@title="Next"]/@href').extract()))
         print("我要打印producturl：" + str(producturl))
-        print("我要打印nextproducturl：" + str(nextproducturl) )
+        print("我要打印nextproducturl：" + str(nextproducturl))
+
+        for category in categoryurl:
+            yield scrapy.Request(url=category, callback=self.parse_category)
+
+        if nextproducturl:
+            yield scrapy.Request(url=nextproducturl[0], callback=self.parse_category)
 
         for product in producturl:
             print("正在抓取该产品链接：" + str(product) + "\n")
             yield scrapy.Request(url=product, callback=self.paese_product)
-
-        if nextproducturl is not None:
-            yield scrapy.Request(url=nextproducturl[0], callback=self.parse_category)
-
-        for category in categoryurl:
-            yield scrapy.Request(url=category, callback=self.parse_category)
 
     def paese_product(self,response):
         item = JumiaItem()
