@@ -11,21 +11,21 @@ class JumiaspiderSpider(RedisSpider):
     start_urls = ['https://www.jumia.co.ke/']
 
     def parse(self, response):
-        #获取一级分类链接
-        categoryurl = response.xpath('//a[@class="main-category"]/@href').extract()
-        for url in categoryurl:
+        #获取一级品类链接
+        categoryurl1 = response.xpath('//a[@class="main-category"]/@href').extract()
+        for url in categoryurl1:
             print("正在抓取该url：" + str(url) + "\n")
             yield scrapy.Request(url=url, callback=self.parse_category)
 
     def parse_category(self, response):
-        #得到一级分类品类链接
-        categoryurl = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
+        #得到一级分品类类链接响应，通过xpath获取二级分类
+        categoryurl2 = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
         #获取一级分类页面最后一页值的id
         try:
             nextproducturl = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
         except:
             nextproducturl = 0
-        print("我要打印categoryurl：" + str(categoryurl))
+        print("我要打印categoryurl：" + str(categoryurl2))
         print("我要打印nextproducturl：" + str(nextproducturl))
         print(type(nextproducturl))
 
@@ -37,9 +37,9 @@ class JumiaspiderSpider(RedisSpider):
         else:
             pass
 
-        for categoryl2 in categoryurl:
-            print("正在抓取二级分类链接页面：" + str(categoryl2))
-            yield scrapy.Request(url=categoryl2, callback=self.parse_category_l2)
+        for categorylv2 in categoryurl2:
+            print("正在抓取二级分类链接页面：" + str(categorylv2))
+            yield scrapy.Request(url=categorylv2, callback=self.parse_category_l2)
 
     def parse_category_l2(self, response):
         try:
@@ -77,9 +77,9 @@ class JumiaspiderSpider(RedisSpider):
     def parse_product(self, response):
         producturl = response.xpath('//a[@class="link"]/@href').extract()
 
-        for product in producturl:
-            print("正在抓取分页页面的具体内容：" + str(product))
-            yield scrapy.Request(url=product, callback=self.product)
+        for good in producturl:
+            print("正在抓取分页页面的具体内容：" + str(good))
+            yield scrapy.Request(url=good, callback=self.product)
 
     def product(self, response):
         item = JumiaItem()
