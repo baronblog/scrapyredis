@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy_redis.spiders import RedisSpider
-from scrapy import cmdline
 from ..items import JumiaItem
 
 
@@ -12,30 +11,77 @@ class JumiaspiderSpider(RedisSpider):
     start_urls = ['https://www.jumia.co.ke/']
 
     def parse(self, response):
+        #获取一级分类链接
         categoryurl = response.xpath('//a[@class="main-category"]/@href').extract()
         for url in categoryurl:
             print("正在抓取该url：" + str(url) + "\n")
             yield scrapy.Request(url=url, callback=self.parse_category)
 
-
-    def parse_category(self,response):
-        producturl = response.xpath('''//a[@class="link"]/@href''').extract()
+    def parse_category(self, response):
+        #得到一级分类品类链接
         categoryurl = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
-        nextproducturl = list(set(response.xpath('//li/a[@title="Next"]/@href').extract()))
-        print("我要打印producturl：" + str(producturl))
+        #获取一级分类页面最后一页值的id
+        try:
+            nextproducturl = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
+        except:
+            nextproducturl = 0
+        print("我要打印categoryurl：" + str(categoryurl))
         print("我要打印nextproducturl：" + str(nextproducturl))
+        print(type(nextproducturl))
 
-        for category in categoryurl:
-            yield scrapy.Request(url=category, callback=self.parse_category)
+        if int(nextproducturl):
+            for r in range(1, int(nextproducturl)+1):
+                next_category_url = str(response.url) + "?page=" + str(r)
+                print("正在抓取一级分类链接分页：" + str(next_category_url))
+                yield scrapy.Request(url=next_category_url, callback=self.parse_product)
+        else:
+            pass
 
-        if nextproducturl:
-            yield scrapy.Request(url=nextproducturl[0], callback=self.parse_category)
+        for categoryl2 in categoryurl:
+            print("正在抓取二级分类链接页面：" + str(categoryl2))
+            yield scrapy.Request(url=categoryl2, callback=self.parse_category_l2)
+
+    def parse_category_l2(self, response):
+        try:
+            nextproducturll2 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
+        except:
+            nextproducturll2 = 0
+        categoryurll3 = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
+
+        if int(next_category_urll2):
+            for r in range(1, int(nextproducturll2)+1):
+                next_category_urll2 = str(response.url) + "?page=" + str(r)
+                print("正在抓取二级分类页面分页：" + str(next_category_urll2))
+                yield scrapy.Request(url=next_category_urll2, callback=self.parse_product)
+        else:
+            pass
+
+        for categoryl3 in categoryurll3:
+            print("正在抓取三级分类链接页面：" + str(categoryl3))
+            yield scrapy.Request(url=categoryl3, callback=self.parse_category_l3)
+
+    def parse_category_l3(self, response):
+        try:
+            nextproducturll3 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
+        except:
+            nextproducturll3 = 0
+
+        if int(nextproducturll3):
+            for r  in int(nextproducturll3):
+                next_category_urll3 = str(response.url) + "?page=" + str(r)
+                print("正在抓取三级分类页面分页：" + str(next_category_urll3))
+                yield scrapy.Request(url=next_category_urll3, callback=self.parse_product)
+        else:
+            pass
+
+    def parse_product(self, response):
+        producturl = response.xpath('//a[@class="link"]/@href').extract()
 
         for product in producturl:
-            print("正在抓取该产品链接：" + str(product) + "\n")
-            yield scrapy.Request(url=product, callback=self.paese_product)
+            print("正在抓取分页页面的具体内容：" + str(product))
+            yield scrapy.Request(url=product, callback=self.product)
 
-    def paese_product(self,response):
+    def product(self, response):
         item = JumiaItem()
         item['l1'] = response.xpath('//nav[@class="osh-breadcrumb"]/ul/li[1]/a/@title').extract()
         item['l2'] = response.xpath('//nav[@class="osh-breadcrumb"]/ul/li[2]/a/@title').extract()
