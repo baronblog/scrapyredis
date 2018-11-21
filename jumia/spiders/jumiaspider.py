@@ -48,7 +48,7 @@ class JumiaspiderSpider(RedisSpider):
             nextproducturll2 = 0
         categoryurll3 = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
 
-        if int(next_category_urll2):
+        if int(nextproducturll2):
             for r in range(1, int(nextproducturll2)+1):
                 next_category_urll2 = str(response.url) + "?page=" + str(r)
                 print("正在抓取二级分类页面分页：" + str(next_category_urll2))
@@ -100,7 +100,7 @@ class JumiaspiderSpider(RedisSpider):
             item['sale'] = 0
         item['rate'] = response.xpath('//span[@class="text color-default-800 -seller_score"]/text()').extract()
         if item['rate']:
-            item['rate'] = 0
+            item['rate'] = item['rate'][0]
         else:
             item['rate'] = 0
         item['product_url'] = response.xpath('//li[@class="last-child"]/a/@href').extract()
