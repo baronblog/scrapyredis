@@ -38,41 +38,43 @@ class JumiaspiderSpider(RedisSpider):
             pass
 
         for categoryl2 in categoryurl:
+            with open("C:/Users/Hymn/Desktop/x.txt", "a+") as f:
+                f.write(categoryl2)
             print("正在抓取二级分类链接页面：" + str(categoryl2))
-            yield scrapy.Request(url=categoryl2, callback=self.parse_category_l2)
+            # yield scrapy.Request(url=categoryl2, callback=self.parse_category_l2)
 
-    def parse_category_l2(self, response):
-        try:
-            nextproducturll2 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
-        except:
-            nextproducturll2 = 0
-        categoryurll3 = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
-
-        if int(nextproducturll2):
-            for r in range(1, int(nextproducturll2)+1):
-                next_category_urll2 = str(response.url) + "?page=" + str(r)
-                print("正在抓取二级分类页面分页：" + str(next_category_urll2))
-                yield scrapy.Request(url=next_category_urll2, callback=self.parse_product)
-        else:
-            pass
-
-        for categoryl3 in categoryurll3:
-            print("正在抓取三级分类链接页面：" + str(categoryl3))
-            yield scrapy.Request(url=categoryl3, callback=self.parse_category_l3)
-
-    def parse_category_l3(self, response):
-        try:
-            nextproducturll3 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
-        except:
-            nextproducturll3 = 0
-
-        if int(nextproducturll3):
-            for r  in int(nextproducturll3):
-                next_category_urll3 = str(response.url) + "?page=" + str(r)
-                print("正在抓取三级分类页面分页：" + str(next_category_urll3))
-                yield scrapy.Request(url=next_category_urll3, callback=self.parse_product)
-        else:
-            pass
+    # def parse_category_l2(self, response):
+    #     try:
+    #         nextproducturll2 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
+    #     except:
+    #         nextproducturll2 = 0
+    #     categoryurll3 = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
+    #
+    #     if int(nextproducturll2):
+    #         for r in range(1, int(nextproducturll2)+1):
+    #             next_category_urll2 = str(response.url) + "?page=" + str(r)
+    #             print("正在抓取二级分类页面分页：" + str(next_category_urll2))
+    #             yield scrapy.Request(url=next_category_urll2, callback=self.parse_product)
+    #     else:
+    #         pass
+    #
+    #     for categoryl3 in categoryurll3:
+    #         print("正在抓取三级分类链接页面：" + str(categoryl3))
+    #         yield scrapy.Request(url=categoryl3, callback=self.parse_category_l3)
+    #
+    # def parse_category_l3(self, response):
+    #     try:
+    #         nextproducturll3 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
+    #     except:
+    #         nextproducturll3 = 0
+    #
+    #     if int(nextproducturll3):
+    #         for r  in int(nextproducturll3):
+    #             next_category_urll3 = str(response.url) + "?page=" + str(r)
+    #             print("正在抓取三级分类页面分页：" + str(next_category_urll3))
+    #             yield scrapy.Request(url=next_category_urll3, callback=self.parse_product)
+    #     else:
+    #         pass
 
     def parse_product(self, response):
         producturl = response.xpath('//a[@class="link"]/@href').extract()
