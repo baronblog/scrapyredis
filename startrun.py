@@ -5,6 +5,7 @@ from scrapy.utils.project import get_project_settings
 
 from config.config import get_log_config
 from proxyPool.ProxyPoolWorker import get_proxy_pool_worker
+from jumia.spiders.jumiaspider import JumiaspiderSpider
 
 """
     快速启动爬虫
@@ -63,5 +64,5 @@ if __name__ == '__main__':
     Demospider() 是 Scrapy 项目 spider 目录下的爬虫脚本名字
     这里需要更换成 你项目的 爬虫名
     """
-    spider_list = [jumiaspider(), ]
+    spider_list = [JumiaspiderSpider(), ]
     manager.start()

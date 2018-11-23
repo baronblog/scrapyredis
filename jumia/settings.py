@@ -8,6 +8,7 @@
 #     https://doc.scrapy.org/en/latest/topics/settings.html
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+from config.config import IF_USE_PROXY
 
 BOT_NAME = 'jumia'
 
