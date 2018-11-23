@@ -19,8 +19,8 @@ class JumiaspiderSpider(RedisSpider):
 
     def parse_category(self, response):
         print("---------------获得一级分类连接-------："+str(response.meta['url']))
-        with open("C:/Users/Hymn/Desktop/finance/category1.txt", "a+") as f:
-            f.write(str(response.meta['url'])+"\n")
+        #with open("C:/Users/Hymn/Desktop/finance/category1.txt", "a+") as f:
+            #f.write(str(response.meta['url'])+"\n")
         #得到一级分品类类链接响应，通过xpath获取二级分类
         categoryurl2 = response.xpath('//li[@class="osh-subcategory"]/a/@href').extract()
         #获取一级分类页面最后一页值的id
