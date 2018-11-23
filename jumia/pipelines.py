@@ -87,4 +87,6 @@ class MysqlTwistedPipline(object):
             cursor.execute(insert_sql, parameters)
             print("异步插入成功")
         except:
+            MysqlTwistedPipline.from_settings()
+            cursor.execute(insert_sql, parameters)
             print("异步插入失败")
