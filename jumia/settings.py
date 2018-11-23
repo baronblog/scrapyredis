@@ -74,6 +74,28 @@ DOWNLOADER_MIDDLEWARES = {
     'jumia.middlewares.JumiaDownloaderMiddleware': 543,
 }
 
+if IF_USE_PROXY:
+    DOWNLOADER_MIDDLEWARES = {
+
+        # 第二行的填写规则
+        #  yourproject.myMiddlewares(文件名).middleware类
+
+        # 设置 User-Agent
+        'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+        'proxyPool.scrapy.RandomUserAgentMiddleware.RandomUserAgentMiddleware': 400,
+
+        # 设置代理
+        'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
+        'proxyPool.scrapy.middlewares.ProxyMiddleware': 100,
+
+        # 设置自定义捕获异常中间层
+        'proxyPool.scrapy.middlewares.CatchExceptionMiddleware': 105,
+
+        # 设置自定义重连中间件
+        'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': None,
+        'proxyPool.scrapy.middlewares.RetryMiddleware': 95,
+    }
+
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
 #EXTENSIONS = {
