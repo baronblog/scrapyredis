@@ -34,9 +34,9 @@ class JumiaspiderSpider(RedisSpider):
 
         for r in range(1, int(nextproducturl)+1):
             next_category_url = str(response.url) + "?page=" + str(r)
-            with open("C:/Users/Hymn/Desktop/finance/category1page.txt", "a+") as f:
-                f.write(next_category_url+"\n")
-            print("正在抓取一级分类链接分页：" + str(next_category_url))
+            #with open("C:/Users/Hymn/Desktop/finance/category1page.txt", "a+") as f:
+                #f.write(next_category_url+"\n")
+            #print("正在抓取一级分类链接分页：" + str(next_category_url))
             yield scrapy.Request(url=next_category_url, callback=self.parse_product, meta={"category": 1})
 
         for categoryl2 in categoryurl2:
@@ -45,8 +45,8 @@ class JumiaspiderSpider(RedisSpider):
 
     def parse_category_l2(self, response):
         print("--------------------我获得了二级分类链接-------------------：" + str(response.meta['parse_category_l2']))
-        with open("C:/Users/Hymn/Desktop/finance/category2.txt", "a+") as f:
-                    f.write(str(response.meta['parse_category_l2'])+"\n")
+        #with open("C:/Users/Hymn/Desktop/finance/category2.txt", "a+") as f:
+                    #f.write(str(response.meta['parse_category_l2'])+"\n")
         try:
             nextproducturll2 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
         except:
@@ -55,9 +55,9 @@ class JumiaspiderSpider(RedisSpider):
 
         for r in range(1, int(nextproducturll2)+1):
             next_category_urll2 = str(response.url) + "?page=" + str(r)
-            with open("C:/Users/Hymn/Desktop/finance/category2page.txt", "a+") as f:
-                f.write(next_category_urll2+"\n")
-            print("正在抓取二级分类页面分页：" + str(next_category_urll2))
+            #with open("C:/Users/Hymn/Desktop/finance/category2page.txt", "a+") as f:
+                #f.write(next_category_urll2+"\n")
+            #print("正在抓取二级分类页面分页：" + str(next_category_urll2))
             yield scrapy.Request(url=next_category_urll2, callback=self.parse_product, meta={"category":2})
 
 
@@ -67,8 +67,8 @@ class JumiaspiderSpider(RedisSpider):
 
     def parse_category_l3(self, response):
         print("-------------------获得三级分类连接------------------：" + str(response.meta['categoryl3']))
-        with open("C:/Users/Hymn/Desktop/finance/category3.txt", "a+") as f:
-                    f.write(str(response.meta['categoryl3'])+"\n")
+        #with open("C:/Users/Hymn/Desktop/finance/category3.txt", "a+") as f:
+                    #f.write(str(response.meta['categoryl3'])+"\n")
         try:
             nextproducturll3 = response.xpath('//ul[@class="osh-pagination -horizontal"]/li/a/@title').extract()[-2]
         except:
@@ -76,9 +76,9 @@ class JumiaspiderSpider(RedisSpider):
 
         for r  in range(1, int(nextproducturll3)):
             next_category_urll3 = str(response.url) + "?page=" + str(r)
-            with open("C:/Users/Hymn/Desktop/finance/category3page.txt", "a+") as f:
-                f.write(next_category_urll3+"\n")
-            print("正在抓取三级分类页面分页：" + str(next_category_urll3))
+            #with open("C:/Users/Hymn/Desktop/finance/category3page.txt", "a+") as f:
+                #f.write(next_category_urll3+"\n")
+            #print("正在抓取三级分类页面分页：" + str(next_category_urll3))
             yield scrapy.Request(url=next_category_urll3, callback=self.parse_product, meta={"category":3})
 
 
@@ -86,7 +86,7 @@ class JumiaspiderSpider(RedisSpider):
         producturl = response.xpath('//a[@class="link"]/@href').extract()
 
         for good in producturl:
-            print("正在抓取"+str(response.meta['category'])+"级分类页面的具体内容：" + str(good))
+            #print("正在抓取"+str(response.meta['category'])+"级分类页面的具体内容：" + str(good))
             yield scrapy.Request(url=good, callback=self.product)
 
     def product(self, response):
