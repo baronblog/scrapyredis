@@ -77,7 +77,7 @@ class MysqlTwistedPipline(object):
     def insert_data(self, cursor, item):
         print("开始异步插入数据")
         dates = int(time.time())
-        insert_sql="insert into jumia_scrapy (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values\
+        insert_sql="insert into jumia_scrapy_tongbu (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values\
                     (%s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         parameters = (item['l1'][0], item['l2'][0], item['l3'][0],item['goods_name'][0], \
                                                                        item['review'][0], item['store'][0], item['sale'], item['rate'], \

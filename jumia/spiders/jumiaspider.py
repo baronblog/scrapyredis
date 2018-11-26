@@ -4,10 +4,10 @@ from scrapy_redis.spiders import RedisSpider
 from ..items import JumiaItem
 
 
-class JumiaspiderSpider(RedisSpider):
+class JumiaspiderSpider(scrapy.Spider):
     name = 'jumiaspider'
     allowed_domains = ['jumia.co.ke']
-    redis_key = 'jumiaspider:start_urls'
+    #redis_key = 'jumiaspider:start_urls'
     start_urls = ['https://www.jumia.co.ke/']
 
     def parse(self, response):
