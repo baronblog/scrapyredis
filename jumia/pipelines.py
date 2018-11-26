@@ -12,6 +12,8 @@ from twisted.enterprise import adbapi
 from twisted.internet import reactor
 import asyncio
 import aiomysql
+from aiomysql.cursors import DictCursor
+
 
 # class JumiaPipeline(object):
 #     def __init__(self):
@@ -91,13 +93,13 @@ import aiomysql
 #             print("异步插入失败")
 
 class AiomysqlPipeline(object):
-    def __init__(self, loop):
+    def __init__(self):
         self.host = settings['MYSQL_HOST']
         self.port = settings['MYSQL_PORT']
         self.db = settings['MYSQL_DBNAME']
         self.user = settings['MYSQL_USER']
         self.passwd = settings['MYSQL_PASSWORD']
-        self.loop = loop
+        self.loop = asyncio.get_event_loop()
 
     async def connect(self):
         self.conn = await aiomysql.connect(self.host, self.port, self.user, self.passwd,
@@ -108,7 +110,11 @@ class AiomysqlPipeline(object):
         await self.conn.close()
         return True
 
-    async def process_item(self, item, spider, conn):
+    def process_item(self, loop):
+        self.loop.run_until_complete(self.conn_item())
+
+
+    async def conn_item(self, item, spider, conn):
         dates = str(time.strftime("%Y%m%d"))
         insert_sql = "insert into jumia_scrapy_tongbu (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values (%s ,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         parameters = (item['l1'][0], item['l2'][0], item['l3'][0],item['goods_name'][0], \
@@ -117,3 +123,8 @@ class AiomysqlPipeline(object):
         async with self.conn.cursor() as cur:
             await cur.excute(insert_sql, parameters)
             print("执行成功")
+
+
+
+
+
