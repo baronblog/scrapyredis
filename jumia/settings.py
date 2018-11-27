@@ -15,11 +15,17 @@ BOT_NAME = 'jumia'
 SPIDER_MODULES = ['jumia.spiders']
 NEWSPIDER_MODULE = 'jumia.spiders'
 
-#SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-#DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 #redis配置
-
-#REDIS_URL = 'redis://:yang5224910@96.45.191.65:6379'
+SCHEDULER_PERSIST = True
+#状态持久化
+CONCURRENT_ITEMS = 100
+#限制并发
+REDIS_URL = 'redis://:yang5224910@96.45.191.65:6379'
+redishost = '96.45.191.65'
+redisport = 6379
+redispassword = 'yang5224910'
 #REDIS_URL = 'redis://:yang5224910@127.0.0.1:6379'
 #ITEM_PIPELINES = {
 #    'scrapy_redis.pipelines.RedisPipeline': 300
@@ -29,6 +35,7 @@ ITEM_PIPELINES = {
 #    'jumia.pipelines.JumiaPipeline': 600,
 #    'jumia.pipelines.MysqlTwistedPipline': 500,
      'jumia.pipelines.AiomysqlPipeline': 400,
+     'scrapy_redis.pipelines.RedisPipeline': 401
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

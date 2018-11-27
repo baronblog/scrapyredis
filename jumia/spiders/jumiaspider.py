@@ -4,7 +4,7 @@ from scrapy_redis.spiders import RedisSpider
 from ..items import JumiaItem
 
 
-class JumiaspiderSpider(scrapy.Spider):
+class JumiaspiderSpider(RedisSpider):
     name = 'jumiaspider'
     allowed_domains = ['jumia.co.ke']
     #redis_key = 'jumiaspider:start_urls'
