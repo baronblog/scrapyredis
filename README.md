@@ -1,10 +1,15 @@
 ## Scrapy 分布式爬虫
 
+### 运行环境
+Python3.6
+Scrapy1.5
+Redis2.1
+
 ### 实现功能点如下：
 * 使用Redis代替Scrapy默认调度器组成分布式爬虫
 * 使用xpath抽取相关数据
 * 针对网站反爬，重写Scrapy的管道组件(pipeline)，随机更换user_agent/referral/ip
-* 使用Twisted框架的adbapi创建连接池存储数据到Mysql
+* 使用Redis存储存储数据
 
 
 实现思路图如下：
