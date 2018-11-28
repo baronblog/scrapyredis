@@ -22,10 +22,10 @@ SCHEDULER_PERSIST = True
 #状态持久化
 CONCURRENT_ITEMS = 100
 #限制并发
-REDIS_URL = 'redis://:yang5224910@96.45.191.65:6379'
-redishost = '96.45.191.65'
-redisport = 6379
-redispassword = 'yang5224910'
+REDIS_URL = 'redis'
+redishost = 'ip'
+redisport = 8977
+redispassword = 'password'
 #REDIS_URL = 'redis://:yang5224910@127.0.0.1:6379'
 #ITEM_PIPELINES = {
 #    'scrapy_redis.pipelines.RedisPipeline': 300
@@ -51,7 +51,7 @@ SCHEDULER_FLUSH_ON_START = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 0.65
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -67,11 +67,11 @@ DOWNLOAD_DELAY = 1
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 #   'Accept-Language': 'en',
 #}
-MYSQL_HOST = '96.45.191.65'
-MYSQL_DBNAME = 'louis'     # 数据库名
-MYSQL_USER = 'root'         # 数据库用户
+MYSQL_HOST = 'ip'
+MYSQL_DBNAME = 'account'     # 数据库名
+MYSQL_USER = 'member'         # 数据库用户
 MYSQL_PORT = 3306
-MYSQL_PASSWORD = '#Yang5224910$%'   # 数据库密码
+MYSQL_PASSWORD = 'password'   # 数据库密码
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
