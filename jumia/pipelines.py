@@ -135,7 +135,7 @@ class AiomysqlPipeline(object):
         dates = time.strftime("%Y%m%d")
         parameters = (item['l1'][0], item['l2'][0], item['l3'][0], item['goods_name'][0], item['review'][0], item['store'][0], item['sale'], item['rate'], \
         item['product_url'], item['price'][0], dates)
-        insert_sql = "insert into jumia_scrapy_tongbu (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values ('%s' ,'%s', '%s', '%s', '%s',\
+        insert_sql = "insert into jumia_scrapy (l1,l2,l3,goods_name,review,store,sale,rate,product_url,price,dates) values ('%s' ,'%s', '%s', '%s', '%s',\
                   '%s', '%s', '%s', '%s', '%s', '%s')"%(parameters)
         try:
             print("开始插入redis数据库")
